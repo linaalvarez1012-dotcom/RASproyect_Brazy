@@ -7,7 +7,7 @@ def callback(msg):
     datos = f'{msg.servo},{msg.grados}\n'
     wifi_config.sendall(datos.encode('utf-8'))
 
-def wifi_setup(ip = '', port=8080):
+def wifi_setup(ip = '172.20.10.2', port=8080):
     global wifi_config
     wifi_config = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     wifi_config.connect((ip, port))
@@ -16,8 +16,8 @@ def wifi_setup(ip = '', port=8080):
 def main():
     rclpy.init()
     node = rclpy.create_node('control')
-    node.declare_parameter('ip', '')
-    node.declare_parameter('port', '8080')
+    node.declare_parameter('ip', '172.20.10.2')
+    node.declare_parameter('port', 8080)
     ip = node.get_parameter('ip').get_parameter_value().string_value
     port = node.get_parameter('port').get_parameter_value().integer_value
     wifi_setup(ip,port)
