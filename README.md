@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Proyecto Brazy RAS 
 
 * explicacion del proyecto
@@ -32,3 +33,7 @@ Clonar el repositorio:
 
 ```bash
 https://github.com/linaalvarez1012-dotcom/RASproyect_Brazy.git
+=======
+#ros2
+
+>>>>>>> 480df0c (actualizacion gitignore y cambios ROS2 ESP32)

@@ -138,6 +138,17 @@ celerybeat.pid
 
 # RabbitMQ
 mnesia/
+
+# ROS2
+install/
+log/
+build/
+
+# PlatformIO
+.pio/
+
+# IDE
+.vscode/
 rabbitmq/
 rabbitmq-data/
 
@@ -216,3 +227,13 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+# ROS2
+install/
+log/
+build/
+
+# PlatformIO
+.pio/
+
+# IDE
+.vscode/
