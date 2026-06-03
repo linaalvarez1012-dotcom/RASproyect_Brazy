@@ -15,7 +15,14 @@ const int pinCodo         = 17;
 const int pinRotatoriomin = 27;
 const int pinMuneca       = 26;
 const int pinDedos        = 13;
+int antHombro = 0;
 
+/*
+Posicion inical sleep
+base = 0, hombro = 0, codo = 180, rota = 55, muneca = 180, dedos = 90
+Posicion inical awake
+base = 0, hombro = 45, codo = 180, rota = 55, muneca = 90, dedos = 20 
+*/
 Servo base, hombro1, hombro2, codo, rotatoriomin, muneca, dedos;
 
 WiFiServer server(PUERTO);
@@ -25,6 +32,107 @@ String inputBuffer = "";
 int servo_id = 0;
 int grados   = 0;
 
+
+void moverServo(Servo &servo, int objetivo, int velocidad, int actual) {
+  objetivo = constrain(objetivo, 0, 180);
+
+  if (actual < objetivo) {
+    for (int pos = actual; pos <= objetivo; pos++) {
+      servo.write(pos);
+      delay(velocidad);
+    }
+  } else {
+    for (int pos = actual; pos >= objetivo; pos--) {
+      servo.write(pos);
+      delay(velocidad);
+    }
+  }
+}
+
+void moverHombros(int objetivo, int velocidad,int actual) {
+  objetivo = constrain(objetivo, 0, 180);
+
+  if (actual < objetivo) {
+    for (int pos = actual; pos <= objetivo; pos++) {
+      hombro1.write(pos);
+      hombro2.write(180 - pos);
+      delay(velocidad);
+    }
+  } else {
+    for (int pos = actual; pos >= objetivo; pos--) {
+      hombro1.write(pos);
+      hombro2.write(180 - pos);
+      delay(velocidad);
+    }
+  }
+}
+
+void guardarBrazy () {
+  
+  base.write(0);
+  rotatoriomin.write(55);
+  muneca.write(180);
+    
+// HOMBROS A 0
+int mov1 = hombro1.read();
+int objetivo = 0;
+
+while (mov1 != objetivo) {
+
+  if (mov1 < objetivo) {
+    mov1++;
+  } else {
+    mov1--;
+  }
+
+  hombro1.write(mov1);
+  hombro2.write(180 - mov1);
+
+  delay(20);
+}
+  codo.write(180);
+  dedos.write(90);      
+}
+
+void initiateBrazy() {
+  //Hombros
+  moverHombros(45, 100,0);
+
+ //codo
+  moverServo(codo, 135, 100,180);
+
+  // ROTATORIO
+  moverServo(rotatoriomin, 55, 100,55);
+  
+  // MUÑECA
+  moverServo(muneca, 90, 100,180);
+  
+  // BASE
+  for (int i = 0; i < 2; i++) {
+    moverServo(base, 180, 100,0);
+  
+    moverServo(base, 0, 100,180);
+  
+  }
+
+  // MUÑECA
+  moverServo(muneca, 90, 100,180);
+  
+
+  moverServo(muneca, 135, 100,90);
+  
+
+  // DEDOS
+  for (int j = 0; j < 3; j++) {
+    moverServo(dedos, 20, 100,90);
+  
+
+    moverServo(dedos, 90, 100,20);
+  
+  }
+  
+}
+
 void parsearDatos(String data) {
   int separador = data.indexOf(',');
   if (separador == -1) return;
@@ -33,6 +141,7 @@ void parsearDatos(String data) {
   grados   = data.substring(separador + 1).toInt();
 
   Serial.println("Servo: " + String(servo_id) + " Grados: " + String(grados));
+  Serial.println("ip:" + WiFi.localIP().toString());
 
   switch (servo_id) {
     case 1:
@@ -40,22 +149,22 @@ void parsearDatos(String data) {
       break;
 
     case 2: {
-      int mov1 = hombro1.read();
-      if (mov1 < grados) {
-        while (mov1 <= grados) {
-          hombro1.write(mov1);
-          hombro2.write(180 - mov1);
-          mov1++;
+      if (antHombro < grados) {
+        while (antHombro <= grados) {
+          hombro1.write(antHombro);
+          hombro2.write(180 - antHombro);
+          antHombro++;
           delay(20);
         }
       } else {
-        while (mov1 >= grados) {
-          hombro1.write(mov1);
-          hombro2.write(180 - mov1);
-          mov1--;
+        while (antHombro >= grados) {
+          hombro1.write(antHombro);
+          hombro2.write(180 - antHombro);
+          antHombro--;
           delay(20);
         }
       }
+      antHombro = grados;
       break;
     }
 
@@ -74,15 +183,16 @@ void parsearDatos(String data) {
     case 6:
       dedos.write(grados);
       break;
-
+    case 7:
+      initiateBrazy();
+    break;
     default:
       Serial.println("Servo no reconocido");
       break;
   }
-}
+} 
 
-void setup() {
-  WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
+void setup() {  WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0);
   Serial.begin(115200);
 
   base.attach(pinBase);

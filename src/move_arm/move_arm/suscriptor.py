@@ -11,7 +11,7 @@ def wifi_setup(ip = '172.20.10.2', port=8080):
     global wifi_config
     wifi_config = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     wifi_config.connect((ip, port))
-    print("Wife setup complete")
+    print("Wifi setup complete")
 
 def main():
     rclpy.init()
