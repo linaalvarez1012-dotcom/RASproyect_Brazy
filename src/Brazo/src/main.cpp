@@ -96,40 +96,33 @@ while (mov1 != objetivo) {
 
 void initiateBrazy() {
   //Hombros
-  moverHombros(45, 100,0);
+  moverHombros(30, 50,0);
 
  //codo
-  moverServo(codo, 135, 100,180);
+  codo.write(180);
 
   // ROTATORIO
-  moverServo(rotatoriomin, 55, 100,55);
+  moverServo(rotatoriomin, 55, 50,55);
   
   // MUÑECA
-  moverServo(muneca, 90, 100,180);
+  moverServo(muneca, 90, 50,180);
   
   // BASE
-  for (int i = 0; i < 2; i++) {
-    moverServo(base, 180, 100,0);
+    moverServo(base, 180, 50,0);
   
-    moverServo(base, 0, 100,180);
-  
-  }
+    moverServo(base, 0, 50,180);
 
   // MUÑECA
-  moverServo(muneca, 90, 100,180);
+  moverServo(muneca, 130, 50,180);
   
 
-  moverServo(muneca, 135, 100,90);
+  moverServo(muneca, 160, 50,90);
   
 
   // DEDOS
-  for (int j = 0; j < 3; j++) {
-    moverServo(dedos, 20, 100,90);
-  
+    moverServo(dedos, 20, 50,90);
 
-    moverServo(dedos, 90, 100,20);
-  
-  }
+    moverServo(dedos, 90, 50,20);
   
 }
 
