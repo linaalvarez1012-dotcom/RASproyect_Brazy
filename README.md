@@ -1,16 +1,11 @@
-<<<<<<< HEAD
 # Proyecto Brazy RAS 
 
-* explicacion del proyecto
+El proyecto Brazy se trata de un brazo robotico que cuenta con 6 grados de libertad. El brazo es controlado mediante ROS 2, PlatformIO y un microcontrolador ESP32. El brazo utiliza 7 servomotores ya que el movimiento "hombros" es manejado por dos servomotores en paralelo y se mueven en espejo. 
   
 ## Integrantes
 Juan Sebastian Moya Perdomo
 Lina Sofia Alvarez Martinez
 Samuel Arango Hernandez
-
-## Descripción
-
-[describir qué hace el robot, nodo, simulación o sistema].
 
 El sistema incluye:
 
@@ -27,13 +22,18 @@ El sistema incluye:
 - Colcon
 - Git
 
-## Instalación
+## Funcionamiento
 
-Clonar el repositorio:
 
-```bash
-https://github.com/linaalvarez1012-dotcom/RASproyect_Brazy.git
-=======
-#ros2
++ fjmkfj
+- juujyu
+-- ujmhm
 
->>>>>>> 480df0c (actualizacion gitignore y cambios ROS2 ESP32)
+  tjtjtjt
+    ujyjyjy
+
+###glkhjgkjhkgh
+
+
+
+
