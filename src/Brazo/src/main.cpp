@@ -49,82 +49,61 @@ void moverServo(Servo &servo, int objetivo, int velocidad, int actual) {
   }
 }
 
-void moverHombros(int objetivo, int velocidad,int actual) {
-  objetivo = constrain(objetivo, 0, 180);
-
-  if (actual < objetivo) {
-    for (int pos = actual; pos <= objetivo; pos++) {
-      hombro1.write(pos);
-      hombro2.write(180 - pos);
-      delay(velocidad);
-    }
-  } else {
-    for (int pos = actual; pos >= objetivo; pos--) {
-      hombro1.write(pos);
-      hombro2.write(180 - pos);
-      delay(velocidad);
-    }
-  }
-}
-
-void guardarBrazy () {
+void sleepBrazy () {
   
   base.write(0);
+  delay(300);
   rotatoriomin.write(55);
+  delay(300);
   muneca.write(180);
-    
-// HOMBROS A 0
-int mov1 = hombro1.read();
-int objetivo = 0;
-
-while (mov1 != objetivo) {
-
-  if (mov1 < objetivo) {
-    mov1++;
-  } else {
-    mov1--;
-  }
-
-  hombro1.write(mov1);
-  hombro2.write(180 - mov1);
-
-  delay(20);
-}
-  codo.write(180);
-  dedos.write(90);      
+  delay(300);
+  dedos.write(90);
+  delay(300);
 }
 
-void initiateBrazy() {
-  //Hombros
-  moverHombros(30, 50,0);
-
- //codo
-  codo.write(180);
-
+void awakeBrazy() {
   // ROTATORIO
   moverServo(rotatoriomin, 55, 50,55);
-  
+  delay(300);
   // MUÑECA
   moverServo(muneca, 90, 50,180);
-  
+  delay(300);
   // BASE
-    moverServo(base, 180, 50,0);
-  
-    moverServo(base, 0, 50,180);
-
+    moverServo(base, 180, 20,0);
+  delay(300);
+    moverServo(base, 0, 20,180);
+  delay(300);
   // MUÑECA
   moverServo(muneca, 130, 50,180);
-  
-
+  delay(300);
   moverServo(muneca, 160, 50,90);
-  
-
+  delay(300);
   // DEDOS
-    moverServo(dedos, 20, 50,90);
-
-    moverServo(dedos, 90, 50,20);
-  
+    moverServo(dedos, 40, 20,90);
+  delay(300);
+    moverServo(dedos, 90, 20,40);
+  delay(300);
 }
+
+void bailecitoBrazy (){
+  //Rotatorio mini.
+  moverServo(rotatoriomin, 90, 10,55);
+  delay (200);
+  moverServo(rotatoriomin, 40, 10,90);
+  delay (200);
+
+  //Base.
+  moverServo(base, 180, 20, 0);
+  delay(200);
+  moverServo(base, 0, 20, 90);
+  delay (200);
+  moverServo(base, 180, 20, 0);
+  delay (200);
+
+  moverServo(dedos, 40, 30, 50);
+
+}
+
 
 void parsearDatos(String data) {
   int separador = data.indexOf(',');
@@ -173,12 +152,19 @@ void parsearDatos(String data) {
       muneca.write(grados);
       break;
 
-    case 6:
-      dedos.write(grados);
-      break;
-    case 7:
-      initiateBrazy();
+case 6:
+    grados = max(30, min(50, grados));  // limita entre 30 y 50
+    dedos.write(grados);
     break;
+    case 7:
+      awakeBrazy();
+    break;
+    case 8:
+      sleepBrazy();
+      break;
+    case 9:
+      bailecitoBrazy();
+      break;
     default:
       Serial.println("Servo no reconocido");
       break;
