@@ -47,7 +47,7 @@ Samuel Arango Hernández
 * Colcon
 * Git
 
-## Paso a paso
+## Ejecución
 
 ### ROS 2
 
@@ -60,18 +60,10 @@ Samuel Arango Hernández
 ### PlatformIO
 
 * Switch case para controlar los servos de manera independiente con `s` para disminuir y `w` para aumentar. Además, se implementó una función para guardar (`sleep`) y una para despertar (`awake`) el brazo.
-* Control de los servos mediante una función que los mueve grado a grado.
-* Comando para que la ESP32 se conecte a Wi-Fi.
-
-### ESP32
-
-* Se alimentó mediante USB.
+* Control de los servos mediante una función de movimiento grado a grado.
+* Comando para que la ESP32 se conecte a Wi-Fi. ********
 
 ### Compilación
-
-* *Pendiente*
-
-### Ejecución
 
 * *Pendiente*
 
