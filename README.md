@@ -1,10 +1,10 @@
-# Proyecto Brazy RAS
+# RAS Proyect ¨Brazy¨
 
 El proyecto Brazy se trata de un brazo robótico que cuenta con 6 grados de libertad. El brazo es controlado mediante ROS 2, PlatformIO y un microcontrolador ESP32. Utiliza 7 servomotores, ya que el movimiento de los “hombros” es manejado por dos servomotores en paralelo, los cuales se mueven en espejo para mejorar el funcionamiento del brazo.
 
 El proyecto permite el movimiento del robot con el teclado mediante un sistema teleop. Desde ROS 2 se envían comandos de control por Wi-Fi que permiten activar diferentes articulaciones, mientras que PlatformIO carga el código de manera serial a la ESP32.
 
-## Integrantes
+## Team memebers
 
 Juan Sebastián Moya Perdomo
 
@@ -14,7 +14,7 @@ Samuel Arango Hernández
 
 ---
 
-## Herramientas y elementos
+## Tools
 
 ### Software
 
@@ -37,7 +37,7 @@ Samuel Arango Hernández
 * Regulador de voltaje
 * Botón
 
-## Requisitos
+## Requirements
 
 * Ubuntu 24.04
 * ROS 2 Jazzy
@@ -47,7 +47,7 @@ Samuel Arango Hernández
 * Colcon
 * Git
 
-## Ejecución
+## Execution
 
 ### ROS 2
 
@@ -63,11 +63,11 @@ Samuel Arango Hernández
 * Control de los servos mediante una función de movimiento grado a grado.
 * Comando para que la ESP32 se conecte a Wi-Fi. ********
 
-### Compilación
+### Compilation
 
 * *Pendiente*
 
-### Control por teclado
+### Keybord control
 
 Se configuró el teleop para que funcione mediante las teclas de números del 1 al 8, de manera que las primeras 6 controlan los servos independientes y las otras dos activan las funciones de despertar y guardar el brazo.
 
