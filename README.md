@@ -154,3 +154,6 @@ The robotic arm is controlled through a keyboard teleoperation interface.
 The servo motors are powered by three **3.7 V lithium batteries** (two **4800 mAh** batteries and one **2200 mAh** battery). The batteries are connected through a power switch and a **5 V voltage regulator**, which supplies the servo expansion board.
 
 The ESP32 is powered independently via the computer's USB connection during programming and operation.
+
+## Video 
+https://youtube.com/shorts/rjgz4Fenm7s?si=L5Q_vgLO867-sEdD 
