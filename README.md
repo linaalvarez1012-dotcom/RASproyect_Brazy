@@ -1,4 +1,10 @@
 # RAS Proyect ¨Brazy¨
+![ROS2](https://img.shields.io/badge/ROS2-Jazzy-22314E?logo=ros&logoColor=white)
+![Ubuntu](https://img.shields.io/badge/Ubuntu-24.04-E95420?logo=ubuntu&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
+![PlatformIO](https://img.shields.io/badge/PlatformIO-IDE-F5822A?logo=platformio&logoColor=white)
+![ESP32](https://img.shields.io/badge/ESP32-DevKit-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
 
 The Brazy project is a robotic arm with six degrees of freedom controlled by servomotors through an ESP32 microcontroller using ROS 2 and PlatformIO. The system uses a total of seven servomotors to achieve six independent movements, as the shoulder joint is driven by two parallel servomotors that operate in opposite directions. This configuration provides greater torque, improving the arm's strength and overall performance.
 
