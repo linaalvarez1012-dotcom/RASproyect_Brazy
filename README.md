@@ -94,7 +94,11 @@ sub = node.create_subscription(Msgcmd, 'conexion', callback, 10)
 The ESP32 establishes a Wi-Fi connection to communicate with the ROS 2 subscriber node. Once the connection is established, it continuously waits for incoming commands that will be translated into servo movements.
 
 ```cpp
-WiFi.begin(ssid, clave); while (WiFi.status() != WL_CONNECTED) { delay(500); Serial.print("."); } server.begin(); Serial.println("\nConectado. IP: " + WiFi.localIP().toString()); Serial.println("Servidor listo en puerto " + String(PUERTO));
+WiFi.begin(ssid, clave);
+while (WiFi.status() != WL_CONNECTED) { delay(500);
+Serial.print("."); } server.begin();
+Serial.println("\nConectado. IP: " + WiFi.localIP().toString());
+Serial.println("Servidor listo en puerto " + String(PUERTO));
 ```
 
 ### Servo Control
