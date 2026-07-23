@@ -5,9 +5,11 @@
 ![PlatformIO](https://img.shields.io/badge/PlatformIO-IDE-F5822A?logo=platformio&logoColor=white)
 ![ESP32](https://img.shields.io/badge/ESP32-DevKit-blue)
 
-The Brazy project is a robotic arm with six degrees of freedom controlled by servomotors through an ESP32 microcontroller using ROS 2 and PlatformIO. The system uses a total of seven servomotors to achieve six independent movements, as the shoulder joint is driven by two parallel servomotors that operate in opposite directions. This configuration provides greater torque, improving the arm's strength and overall performance.
+Brazy is a **6-DOF robotic arm** controlled by an **ESP32** microcontroller using **ROS 2 Jazzy** and **PlatformIO**. Although the arm provides six independent degrees of freedom, it is actuated by **seven servo motors**. The shoulder joint is driven by two synchronized servos operating in opposite directions, increasing the  torque and improving the  performance of the movement.
 
-The robotic arm can be controlled using a keyboard through a teleoperation (Teleop) system. Control commands are transmitted from ROS 2 to the ESP32 over a Wi-Fi connection to actuate the different joints, while PlatformIO is used to upload the firmware to the ESP32 via a serial connection.
+It is based on **ROS 2** communication. User commands are generated through a keyboard teleoperation interface and transmitted to the ESP32 over a **Wi-Fi** connection, where they are interpreted to actuate correspondingly. Firmware development and deployment uses **PlatformIO** via a USB serial connection.
+
+---
 
 ## Team memebers
 
@@ -23,13 +25,16 @@ Samuel Arango Hernández
 
 ### Software
 
-* Linux
+* Ubuntu Linux
 * ROS 2
 * PlatformIO
-* Programing lenguges: Arduino, Python y C++
-* library ESP32Servo
-* Teleop
-* GitHub
+* Arduino
+* Python
+* C++
+* ESP32Servo Library
+* ROS 2 Teleoperation (Teleop)
+* Git & GitHub
+
 
 ### Hardware
 
@@ -38,9 +43,9 @@ Samuel Arango Hernández
 * Jumper cables
 * Arm chassis
 * Coputer with Linux
-* Three 3.7 V lithium batteries (two 4800 mAh batteries and one 2200 mAh battery)
+* Three 3.7 V lithium batteries (2 × 4800 mAh, 1 × 2200 mAh)
 * 5 V voltage regulator
-* Button
+* Power switch
 
 ## Software requirements
 
@@ -52,74 +57,95 @@ Samuel Arango Hernández
 * Colcon
 * Git
 
-## Execution
+---
 
-### ROS 2
+# Step by step
 
-* Creación del custom message.
-* 
-  En primera instancia se creo un nuevo tipo de mensaje especial para este proyecto, para poder tener control completo de los tipos de datos enviados en la comunicacion de nodos que se usaran     para la ejecucion del proyecto
-  
-* Configuración de los nodos publicador y suscriptor.
-  
-   ### Publicador
-  
-    ```python
-    self.pub = self.create_publisher(Msgcmd, 'conexion', 10)
-    ```
-    Asi de declaro el nodo encargado de la comunicacion entre la persona que controla el robot y el robot su principal funcion es recibir informacion del teclado o comandos previamente       e       establecidos, para posteriormente publicar esta informacion a un topico,al cual en el comando mencionado inicialmente se le asigno el tipo de mensaje que transportara y el nombre de este, el topico sera el encargado de hacer llegar laa informacion al publicador el cual se encargara del siguiente proceso.
 
-    ### Suscriptor
-  
-  ```python
-  sub = node.create_subscription(Msgcmd,'conexion',callback,10)
-  ```
-  Asi se declaro el nodo suscriptor el cual es el encargado de recibir el mensaje enviado por el publicador y transportado por el topico, para que por medio de la conexion wifi con la ESP32 establecida al momento de ejecutar el nodo, enviar este mensaje para que la ESP32 realice el movimiento solicitado por la persona que controla el robot desde el nodo publicador.
+## ROS 2
 
-### PlatformIO
+### Custom Message
 
-* Conexion del microcontrolador a wifi.
-  ```cpp
-  WiFi.begin(ssid, clave);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  server.begin();
-  Serial.println("\nConectado. IP: " + WiFi.localIP().toString());
-  Serial.println("Servidor listo en puerto " + String(PUERTO));
-  ```
-  Como ya se ha mencionado el microcontrolador usado para este proyecto es la ESP32 la cual por medio de una libreria y los comandos visualizados en las lineas d ecodigo ya mostradas se conecto a wifi para establecer comunicacion con el nodo suscriptor.
-  
-* Switch case para controlar los servos de manera independiente con `s` para disminuir y `w` para aumentar. Además, se implementó una función para guardar (`sleep`) y una para despertar (`awake`) el brazo.
+A custom ROS 2 message was created to provide complete control over the data exchanged between the different nodes in the system. This allows the project to transmit all the information required to control the robotic arm while maintaining simple and efficient communication.
 
-### Compilation
 
-Como primer paso, desde la raíz del workspace de ROS 2 se ejecuta el comando de compilación `colcon build`, con el fin de generar los archivos de construcción y los ejecutables correspondientes a cada uno de los paquetes creados. Posteriormente, se ejecuta el comando `source install/setup.bash`, el cual carga el entorno del workspace en la terminal, permitiendo que ROS 2 reconozca los paquetes, nodos, mensajes personalizados y demás recursos generados durante la compilación.
+### Publisher Node
+
+The publisher node serves as the interface between the operator and the robotic arm. It receives keyboard commands from the teleoperation interface and publishes them to the `conexion` topic using the custom `Msgcmd` message type.
+
+```python
+self.pub = self.create_publisher(Msgcmd, 'conexion', 10)
+```
+
+### Subscriber Node
+
+The subscriber node listens to the `conexion` topic and receives the commands published by the teleoperation node. Each received message is forwarded to the ESP32 through the Wi-Fi connection, allowing the microcontroller to execute the requested movement.
+
+```python
+sub = node.create_subscription(Msgcmd, 'conexion', callback, 10)
+```
+
+---
+
+## PlatformIO
+
+### ESP32 Wi-Fi Communication
+
+The ESP32 establishes a Wi-Fi connection to communicate with the ROS 2 subscriber node. Once the connection is established, it continuously waits for incoming commands that will be translated into servo movements.
+
+```cpp
+WiFi.begin(ssid, clave); while (WiFi.status() != WL_CONNECTED) { delay(500); Serial.print("."); } server.begin(); Serial.println("\nConectado. IP: " + WiFi.localIP().toString()); Serial.println("Servidor listo en puerto " + String(PUERTO));
+```
+
+### Servo Control
+
+Each joint is controlled independently using a `switch-case` structure. The `W` key increases the selected joint angle, while the `S` key decreases it with a resolution of one degree per command. Additionally, predefined **Awake** and **Sleep** positions were implemented to initialize or safely store the robotic arm.
+
+---
+
+## Build and Execution
+
+### Build the Workspace
+
+    1. From the ROS2 workspace root: execute the compilation command colcon build.   This, to generate the building and executable files that correspond to each package created. 
+    2. Execute the command source install/setup.bash, wich uploads the entorno del workspace in the terminal, allowing the recognition of the packages, nodes, custom messages, among other resources generated during the compilation 
 
 ```bash
 cd Proyecto_ws
 colcon build
 source install/setup.bash
 ```
-Una vez realizados estos pasos, se procede con la ejecucion de los nodos que conforman este proyecto. En primer lugar se inicia con el nodo encargado de la conexion wifi con la ESP32. Este nodo permanece a la espera de los mensajes publicados en el topico `conexion`.
+
+    3.Execute the nodes: First, the node responsible of the Wifi connection with the ESP32. this node will be expecting the messages published by the node `conexion`.
 
 ```bash
 ros2 run move_arm ras_subsccriber
 ```
-Posteriormente, se ejecuta el nodo publicador, el cual envia los comandos de movimiento por medio del topico `conexion`.
+
+    4. Execute the publisher node which will send movement commands through the topic connection.
 
 ```bash
 ros2 run mover_arm ras_publisher
 ```
 
-### Execution
+---
 
+## Keyboard Teleoperation
 
-### Keybord control
+The robotic arm is controlled through a keyboard teleoperation interface.
 
-Se configuró el teleop para que funcione mediante las teclas de números del 1 al 8, de manera que las primeras 6 controlan los servos independientes y las otras dos activan las funciones de despertar y guardar el brazo.
+| Key | Function |
+|:---:|----------|
+| **1 – 6** | Select and control each of the six joints |
+| **7** | Move the arm to the **Awake** position |
+| **8** | Move the arm to the **Sleep** position |
+| **W** | Increase the selected joint angle |
+| **S** | Decrease the selected joint angle |
 
-Los servos se alimentaron con tres baterías de litio de 3.7 V: dos de 4800 mAh y una de 2200 mAh. Estas están conectadas a un botón y a un regulador de voltaje para entregar 5 V a la placa de expansión que alimenta los servos. La ESP32 es alimentada por el computador mediante USB.
+---
 
-* Archivos de lanzamiento para ejecutar el proyecto.
+## Power Supply
+
+The servo motors are powered by three **3.7 V lithium batteries** (two **4800 mAh** batteries and one **2200 mAh** battery). The batteries are connected through a power switch and a **5 V voltage regulator**, which supplies the servo expansion board.
+
+The ESP32 is powered independently via the computer's USB connection during programming and operation.
