@@ -62,7 +62,7 @@ Samuel Arango Hernández
     ```python
     self.pub = self.create_publisher(Msgcmd, 'conexion', 10)
     ```
-    Asi de declaro el nodo encargado de la comunicacion entre la persona que controla el robot y el robot su principal funcion es recibir informacion del teclado o comandos previamente       e       establecidos, para posteriormente publicar esta informacion a un topico,al cual en el comando iniciado inicialmente se le asigno el tipo de mensaje que transportara y el nombre de este, el topico sera el encargado de hacer llegar laa informacion al publicador el cual se encargara del siguiente proceso.
+    Asi de declaro el nodo encargado de la comunicacion entre la persona que controla el robot y el robot su principal funcion es recibir informacion del teclado o comandos previamente       e       establecidos, para posteriormente publicar esta informacion a un topico,al cual en el comando mencionado inicialmente se le asigno el tipo de mensaje que transportara y el nombre de este, el topico sera el encargado de hacer llegar laa informacion al publicador el cual se encargara del siguiente proceso.
 
     ### Suscriptor
   
@@ -73,13 +73,43 @@ Samuel Arango Hernández
 
 ### PlatformIO
 
+* Conexion del microcontrolador a wifi.
+  ```cpp
+  WiFi.begin(ssid, clave);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  server.begin();
+  Serial.println("\nConectado. IP: " + WiFi.localIP().toString());
+  Serial.println("Servidor listo en puerto " + String(PUERTO));
+  ```
+  Como ya se ha mencionado el microcontrolador usado para este proyecto es la ESP32 la cual por medio de una libreria y los comandos visualizados en las lineas d ecodigo ya mostradas se conecto a wifi para establecer comunicacion con el nodo suscriptor.
+  
 * Switch case para controlar los servos de manera independiente con `s` para disminuir y `w` para aumentar. Además, se implementó una función para guardar (`sleep`) y una para despertar (`awake`) el brazo.
-* Control de los servos mediante una función de movimiento grado a grado.
-* Comando para que la ESP32 se conecte a Wi-Fi. ********
 
 ### Compilation
 
-* *Pendiente*
+Como primer paso, desde la raíz del workspace de ROS 2 se ejecuta el comando de compilación `colcon build`, con el fin de generar los archivos de construcción y los ejecutables correspondientes a cada uno de los paquetes creados. Posteriormente, se ejecuta el comando `source install/setup.bash`, el cual carga el entorno del workspace en la terminal, permitiendo que ROS 2 reconozca los paquetes, nodos, mensajes personalizados y demás recursos generados durante la compilación.
+
+```bash
+cd Proyecto_ws
+colcon build
+source install/setup.bash
+```
+Una vez realizados estos pasos, se procede con la ejecucion de los nodos que conforman este proyecto. En primer lugar se inicia con el nodo encargado de la conexion wifi con la ESP32. Este nodo permanece a la espera de los mensajes publicados en el topico `conexion`.
+
+```bash
+ros2 run move_arm ras_subsccriber
+```
+Posteriormente, se ejecuta el nodo publicador, el cual envia los comandos de movimiento por medio del topico `conexion`.
+
+```bash
+ros2 run mover_arm ras_publisher
+```
+
+### Execution
+
 
 ### Keybord control
 
