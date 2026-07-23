@@ -107,8 +107,9 @@ Each joint is controlled independently using a `switch-case` structure. The `W` 
 
 ### Build the Workspace
 
-    1. From the ROS2 workspace root: execute the compilation command colcon build.   This, to generate the building and executable files that correspond to each package created. 
-    2. Execute the command source install/setup.bash, wich uploads the entorno del workspace in the terminal, allowing the recognition of the packages, nodes, custom messages, among other resources generated during the compilation 
+ 1. From the ROS2 workspace root: execute the compilation command colcon build.   This, to generate the building and executable files that correspond to each package created. 
+
+  2. Execute the command source install/setup.bash, wich uploads the entorno del workspace in the terminal, allowing the recognition of the packages, nodes, custom messages, among other resources generated during the compilation 
 
 ```bash
 cd Proyecto_ws
@@ -116,13 +117,13 @@ colcon build
 source install/setup.bash
 ```
 
-    3.Execute the nodes: First, the node responsible of the Wifi connection with the ESP32. this node will be expecting the messages published by the node `conexion`.
+   3.Execute the nodes: First, the node responsible of the Wifi connection with the ESP32. this node will be expecting the messages published by the node `conexion`.
 
 ```bash
 ros2 run move_arm ras_subsccriber
 ```
 
-    4. Execute the publisher node which will send movement commands through the topic connection.
+  4. Execute the publisher node which will send movement commands through the topic connection.
 
 ```bash
 ros2 run mover_arm ras_publisher
