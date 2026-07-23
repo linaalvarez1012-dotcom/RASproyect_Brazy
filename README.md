@@ -52,41 +52,24 @@ Samuel Arango Hernández
 ### ROS 2
 
 * Creación del custom message.
+* 
+  En primera instancia se creo un nuevo tipo de mensaje especial para este proyecto, para poder tener control completo de los tipos de datos enviados en la comunicacion de nodos que se usaran     para la ejecucion del proyecto
+  
 * Configuración de los nodos publicador y suscriptor.
   
    ### Publicador
+  
     ```python
-  import rclpy
-  import socket
-  from brazy.msg import Msgcmd
-  
-  def callback(msg):
-      global wifi_config
-      datos = f'{msg.servo},{msg.grados}\n'
-      wifi_config.sendall(datos.encode('utf-8'))
-  
-  def wifi_setup(ip = '172.20.10.2', port=8080):
-      global wifi_config
-      wifi_config = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-      wifi_config.connect((ip, port))
-      print("Wifi setup complete")
-  
-  def main():
-      rclpy.init()
-      node = rclpy.create_node('control')
-      node.declare_parameter('ip', '172.20.10.2')
-      node.declare_parameter('port', 8080)
-      ip = node.get_parameter('ip').get_parameter_value().string_value
-      port = node.get_parameter('port').get_parameter_value().integer_value
-      wifi_setup(ip,port)
-      sub = node.create_subscription(Msgcmd,'conexion',callback,10)
-      rclpy.spin(node)
-      node.destroy_node()
-      rclpy.shutdown()
+    self.pub = self.create_publisher(Msgcmd, 'conexion', 10)
     ```
+    Asi de declaro el nodo encargado de la comunicacion entre la persona que controla el robot y el robot su principal funcion es recibir informacion del teclado o comandos previamente       e       establecidos, para posteriormente publicar esta informacion a un topico,al cual en el comando iniciado inicialmente se le asigno el tipo de mensaje que transportara y el nombre de este, el topico sera el encargado de hacer llegar laa informacion al publicador el cual se encargara del siguiente proceso.
 
-  * Implementación del nodo teleop en el publicador para configurar los grados, aumentar y disminuir.
-  * Configuración del suscriptor para la comunicación Wi-Fi con la ESP32.
+    ### Suscriptor
+  
+  ```python
+  sub = node.create_subscription(Msgcmd,'conexion',callback,10)
+  ```
+  Asi se declaro el nodo suscriptor el cual es el encargado de recibir el mensaje enviado por el publicador y transportado por el topico, para que por medio de la conexion wifi con la ESP32 establecida al momento de ejecutar el nodo, enviar este mensaje para que la ESP32 realice el movimiento solicitado por la persona que controla el robot desde el nodo publicador.
 
 ### PlatformIO
 
