@@ -1,8 +1,8 @@
 # RAS Proyect ¨Brazy¨
 
-El proyecto Brazy se trata de un brazo robótico que cuenta con 6 grados de libertad. El brazo es controlado mediante ROS 2, PlatformIO y un microcontrolador ESP32. Utiliza 7 servomotores, ya que el movimiento de los “hombros” es manejado por dos servomotores en paralelo, los cuales se mueven en espejo para mejorar el funcionamiento del brazo.
+The Brazy project is a robotic arm with six degrees of freedom controlled by servomotors through an ESP32 microcontroller using ROS 2 and PlatformIO. The system uses a total of seven servomotors to achieve six independent movements, as the shoulder joint is driven by two parallel servomotors that operate in opposite directions. This configuration provides greater torque, improving the arm's strength and overall performance.
 
-El proyecto permite el movimiento del robot con el teclado mediante un sistema teleop. Desde ROS 2 se envían comandos de control por Wi-Fi que permiten activar diferentes articulaciones, mientras que PlatformIO carga el código de manera serial a la ESP32.
+The robotic arm can be controlled using a keyboard through a teleoperation (Teleop) system. Control commands are transmitted from ROS 2 to the ESP32 over a Wi-Fi connection to actuate the different joints, while PlatformIO is used to upload the firmware to the ESP32 via a serial connection.
 
 ## Team memebers
 
@@ -21,28 +21,28 @@ Samuel Arango Hernández
 * Linux
 * ROS 2
 * PlatformIO
-* Lenguajes: Arduino, Python y C++
-* Librería ESP32Servo
+* Programing lenguges: Arduino, Python y C++
+* library ESP32Servo
 * Teleop
 * GitHub
 
 ### Hardware
 
 * ESP32
-* 7 servomotores
-* Cables jumper
-* Carcasa del brazo
-* Computador con Linux
-* Tres baterías de litio de 3.7 V: dos de 4800 mAh y una de 2200 mAh
-* Regulador de voltaje
-* Botón
+* 7 servomotors
+* Jumper cables
+* Arm chassis
+* Coputer with Linux
+* Three 3.7 V lithium batteries (two 4800 mAh batteries and one 2200 mAh battery)
+* 5 V voltage regulator
+* Button
 
-## Requirements
+## Software requirements
 
 * Ubuntu 24.04
 * ROS 2 Jazzy
 * PlatformIO
-* Visual Studio
+* Visual Studio Code
 * Python 3
 * Colcon
 * Git
